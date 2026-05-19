@@ -1,0 +1,75 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: collab-matrix
+
+  # --- Relational Database Setup ---
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/collab_matrix}
+    username: ${SPRING_DATASOURCE_USERNAME:collab_admin}
+    password: ${SPRING_DATASOURCE_PASSWORD:CollabSecurePassword2026!}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # --- Document Database Setup ---
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://collab_admin:CollabMongoPassword2026!@localhost:27017/collab_matrix?authSource=admin}
+    
+    # --- Distributed Cache Setup ---
+    redis:
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: ${SPRING_REDIS_PORT:6379}
+      password: ${SPRING_REDIS_PASSWORD:CollabRedisPassword2026!}
+      timeout: 60000
+
+  # --- Distributed Message Broker Setup ---
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: collab-matrix-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+# --- Web Security & JWT Settings ---
+app:
+  security:
+    jwt:
+      secret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+      expiration-ms: 900000 # 15 minutes
+      refresh-expiration-ms: 604800000 # 7 days
+
+# --- Real-Time websocket parameters ---
+websocket:
+  allowed-origins: "*"
+
+# --- Spring Boot Actuator Observability ---
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus,metrics"
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true

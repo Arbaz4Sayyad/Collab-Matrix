@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.collab</groupId>
+        <artifactId>collab-matrix</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>collab-core</artifactId>
+    <name>CollabMatrix Core</name>
+    <description>Application bootloader orchestrating the modular domain units</description>
+
+    <dependencies>
+        <!-- Domain modules compiled into a single modular runtime deployment -->
+        <dependency>
+            <groupId>com.collab</groupId>
+            <artifactId>collab-auth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.collab</groupId>
+            <artifactId>collab-workspace</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.collab</groupId>
+            <artifactId>collab-task</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.collab</groupId>
+            <artifactId>collab-chat</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.collab</groupId>
+            <artifactId>collab-docs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.collab</groupId>
+            <artifactId>collab-notification</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.collab</groupId>
+            <artifactId>collab-audit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.collab</groupId>
+            <artifactId>collab-search</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Actuator for health checks and observability metrics -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Micrometer Prometheus registry for scraping JVM metrics -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Spring Boot packaging plugin to assemble the executable Jar -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

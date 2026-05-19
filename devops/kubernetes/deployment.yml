@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collab-matrix-backend
+  namespace: collab-matrix
+  labels:
+    app: collab-matrix-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: collab-matrix-backend
+  template:
+    metadata:
+      labels:
+        app: collab-matrix-backend
+    spec:
+      containers:
+        - name: collab-matrix-backend
+          image: collab-matrix-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://postgres-service:5432/collab_matrix"
+            - name: SPRING_DATA_MONGODB_URI
+              value: "mongodb://collab-mongodb-service:27017/collab_matrix"
+            - name: SPRING_REDIS_HOST
+              value: "redis-service"
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-service:9092"
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: "500m"
+              memory: 1Gi
+          readinessProbe:
+            httpGet:
+              path: /api/actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: collab-matrix-backend-service
+  namespace: collab-matrix
+spec:
+  selector:
+    app: collab-matrix-backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP

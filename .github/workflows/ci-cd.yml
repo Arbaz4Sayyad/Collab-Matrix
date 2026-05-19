@@ -1,0 +1,92 @@
+name: CollabMatrix Backend CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: collab_admin
+          POSTGRES_PASSWORD: CollabSecurePassword2026!
+          POSTGRES_DB: collab_matrix
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7.0-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v3
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Compile and Test Backend Modules
+        run: |
+          cd backend
+          mvn clean install -DskipTests=false
+
+      - name: Build Docker Container Image
+        run: |
+          docker build -t collab-matrix-backend:latest -f backend/collab-core/Dockerfile backend
+
+  frontend-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm install --legacy-peer-deps
+
+      - name: Run Vitest Unit Tests
+        run: |
+          cd frontend
+          npm run test
+
+      - name: Build Client Bundles
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Build Frontend Docker Container Image
+        run: |
+          docker build -t collab-matrix-frontend:latest -f frontend/Dockerfile frontend
