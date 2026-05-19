@@ -61,7 +61,7 @@ graph TD
     Client[React/Vite Client] -->|HTTPS / REST| API[Spring Boot API Gateway]
     Client -->|WSS / STOMP| WS[WebSocket Broker Node]
     
-    subgraph Spring Boot Modular Monolith
+    subgraph "Spring Boot Modular Monolith"
         API --> Auth[collab-auth]
         API --> Task[collab-task]
         WS --> Chat[collab-chat]
