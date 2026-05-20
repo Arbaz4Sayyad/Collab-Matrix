@@ -194,15 +194,60 @@ CollabMatrix embraces **Polyglot Persistence**, matching the exact database para
 
 ## 13. LANDING PAGE & UI PREVIEW
 
-*(Add high-resolution screenshots and GIFs here)*
+> [!NOTE]
+> A full cinematic walkthrough of CollabMatrix is available in the demo video below. Screenshots cover all major UI surfaces.
+
+### 🎬 Demo Video
+
+https://github.com/Arbaz4Sayyad/Collab-Matrix/raw/main/Screenshots/collabmatrix_cinematic_demo.mp4
+
+> *Click the link above to watch the full cinematic demo — or find the file at [`Screenshots/collabmatrix_cinematic_demo.mp4`](./Screenshots/collabmatrix_cinematic_demo.mp4)*
+
+---
+
+### 📸 Screenshots
 
 <details>
-<summary><b>Click to expand UI Previews</b></summary>
+<summary><b>🏠 Landing Page</b></summary>
 
-- `[Screenshot: Glassmorphic Landing Page]`
-- `[GIF: Kanban Drag-and-Drop with CSS Confetti]`
-- `[Screenshot: Split-pane Collaborative Document Editor]`
-- `[GIF: Sliding Slack-style Chat Threads]`
+![Landing Page](./Screenshots/landing_page.png)
+
+</details>
+
+<details>
+<summary><b>🔐 Login & Registration</b></summary>
+
+![Login Screen](./Screenshots/login.png)
+
+![Registration Screen](./Screenshots/registration.png)
+
+</details>
+
+<details>
+<summary><b>📊 Dashboard</b></summary>
+
+![Dashboard](./Screenshots/dashboard.png)
+
+</details>
+
+<details>
+<summary><b>📋 Kanban Board</b></summary>
+
+![Kanban Board](./Screenshots/kanban_board.png)
+
+</details>
+
+<details>
+<summary><b>📝 Collaborative Docs (Notion-style)</b></summary>
+
+![Notion Docs](./Screenshots/notion_docs.png)
+
+</details>
+
+<details>
+<summary><b>💬 Slack-style Chat</b></summary>
+
+![Slack Chat](./Screenshots/slack_chat.png)
 
 </details>
 
