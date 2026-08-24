@@ -39,6 +39,8 @@ spring:
   # --- Distributed Message Broker Setup ---
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    listener:
+      auto-startup: ${SPRING_KAFKA_AUTO_STARTUP:false}
     consumer:
       group-id: collab-matrix-group
       auto-offset-reset: earliest
@@ -49,6 +51,11 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+logging:
+  level:
+    org.apache.kafka: ERROR
+    org.springframework.kafka: ERROR
 
 # --- Web Security & JWT Settings ---
 app:

@@ -134,6 +134,7 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://collab_admin:CollabMongoPassword2026!@mongodb:27017/collab_matrix?authSource=admin
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SPRING_KAFKA_AUTO_STARTUP=true
 
   # --- High-Performance React Nginx Frontend ---
   collab-frontend:

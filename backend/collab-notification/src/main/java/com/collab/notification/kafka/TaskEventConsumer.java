@@ -19,7 +19,8 @@ public class TaskEventConsumer {
     @KafkaListener(
             topics = "workspace.task.events",
             groupId = "collab-notification-group",
-            containerFactory = "kafkaListenerContainerFactory"
+            containerFactory = "kafkaListenerContainerFactory",
+            autoStartup = "${spring.kafka.listener.auto-startup:false}"
     )
     public void consumeTaskEvent(TaskEvent event) {
         log.info("Consumed Kafka TaskEvent: [{}] for task: {}", event.getEventType(), event.getTaskId());
