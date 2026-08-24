@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
   servlet:
     context-path: /api
 
@@ -32,6 +32,8 @@ spring:
       host: ${SPRING_REDIS_HOST:localhost}
       port: ${SPRING_REDIS_PORT:6379}
       password: ${SPRING_REDIS_PASSWORD:CollabRedisPassword2026!}
+      ssl:
+        enabled: ${SPRING_REDIS_SSL_ENABLED:false}
       timeout: 60000
 
   # --- Distributed Message Broker Setup ---

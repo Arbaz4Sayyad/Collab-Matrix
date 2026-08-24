@@ -1,0 +1,62 @@
+# Render Blueprint for CollabMatrix Backend & Frontend
+# https://render.com/docs/blueprint-spec
+
+services:
+  # --- Spring Boot Backend Web Service ---
+  - type: web
+    name: collab-matrix-backend
+    runtime: docker
+    dockerContext: ./backend
+    dockerfilePath: ./collab-core/Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /api/actuator/health
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+        # Example Neon/Supabase: jdbc:postgresql://ep-xyz.aws.neon.tech/collab_matrix?sslmode=require
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: SPRING_DATA_MONGODB_URI
+        sync: false
+        # Example Mongo Atlas: mongodb+srv://<user>:<password>@cluster0.xyz.mongodb.net/collab_matrix?retryWrites=true&w=majority
+      - key: SPRING_REDIS_HOST
+        sync: false
+        # Example Upstash Redis: global-xyz.upstash.io
+      - key: SPRING_REDIS_PORT
+        value: 6379
+      - key: SPRING_REDIS_PASSWORD
+        sync: false
+      - key: SPRING_REDIS_SSL_ENABLED
+        value: "true"
+      - key: JAVA_OPTS
+        value: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Xss512k"
+
+  # --- React SPA Frontend Static Site ---
+  - type: static
+    name: collab-matrix-frontend
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    plan: free
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: collab-matrix-backend
+          property: url
+          # Appends /api
+      - key: VITE_WS_URL
+        fromService:
+          type: web
+          name: collab-matrix-backend
+          property: url
+          # Appends /api/ws

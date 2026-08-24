@@ -102,9 +102,15 @@ export const taskApi = {
   // Update task details
   updateTask: async (taskId: string, updates: Partial<Task>): Promise<Task> => {
     try {
-      const res = await api.patch(`/tasks/${taskId}`, updates);
+      const keys = Object.keys(updates);
+      if (keys.every(k => k === 'status' || k === 'version' || k === 'assigneeId')) {
+        const version = updates.version ?? 0;
+        const res = await api.patch(`/tasks/${taskId}/status?status=${updates.status}&version=${version}`);
+        return res.data?.data || res.data;
+      }
+      const res = await api.put(`/tasks/${taskId}`, updates);
       return res.data?.data || res.data;
-    } catch {
+    } catch (err) {
       const idx = mockTasks.findIndex(t => t.id === taskId);
       if (idx !== -1) {
         mockTasks[idx] = {
@@ -115,7 +121,7 @@ export const taskApi = {
         };
         return Promise.resolve(mockTasks[idx]);
       }
-      return Promise.reject(new Error('Task not found.'));
+      throw err;
     }
   },
 
